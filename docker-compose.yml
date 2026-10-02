@@ -1,0 +1,32 @@
+services:
+
+  historico-api:
+    build:
+      context: ../historico-enderecos-api
+    container_name: historico-api
+    ports:
+      - "8001:8001"
+    volumes:
+      - historico-dados:/app/data
+    environment:
+      - DATABASE_NAME=/app/data/enderecos.db
+    networks:
+      - cep-network
+
+  consulta-api:
+    build:
+      context: .
+    container_name: consulta-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - historico-api
+    networks:
+      - cep-network
+
+networks:
+  cep-network:
+    driver: bridge
+
+volumes:
+  historico-dados:
